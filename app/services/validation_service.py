@@ -1,5 +1,9 @@
 """Validation rules for health data (aligned with frontend)."""
 
+from __future__ import annotations
+
+from typing import Optional
+
 HEART_RATE_MIN = 30
 HEART_RATE_MAX = 220
 STEPS_MIN = 0
@@ -16,7 +20,7 @@ def is_valid_steps(total: int) -> bool:
     return STEPS_MIN <= total <= STEPS_MAX
 
 
-def validate_heart_rate(value: int) -> str | None:
+def validate_heart_rate(value: int) -> Optional[str]:
     """
     Validate heart rate. Returns None if valid, otherwise error message.
     """
@@ -29,7 +33,7 @@ def validate_heart_rate(value: int) -> str | None:
     return None
 
 
-def validate_steps(total: int) -> str | None:
+def validate_steps(total: int) -> Optional[str]:
     """
     Validate steps. Returns None if valid, otherwise error message.
     """

@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session, sessionmaker
 
 from app.core.config import get_database_path, settings
 from app.database.base import Base
-from app.models import HeartRate, Steps  # noqa: F401 - register tables with Base.metadata
+from app.models import HeartRate, Patient, Steps  # noqa: F401 - register tables with Base.metadata
 
 # SQLite requires check_same_thread=False for FastAPI async usage with sync sessions
 connect_args = {}
