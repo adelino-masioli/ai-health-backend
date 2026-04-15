@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Optional
 
-from sqlalchemy import select
+from sqlalchemy import desc, select
 from sqlalchemy.orm import Session
 
 from app.models.patient import Patient
@@ -27,3 +27,8 @@ def get_patient_by_id(db: Session, patient_id: str) -> Optional[Patient]:
 def get_patient_by_email(db: Session, email: str) -> Optional[Patient]:
     stmt = select(Patient).where(Patient.email == email)
     return db.execute(stmt).scalar_one_or_none()
+
+
+def list_patients(db: Session) -> list[Patient]:
+    stmt = select(Patient).order_by(desc(Patient.created_at))
+    return list(db.execute(stmt).scalars().all())

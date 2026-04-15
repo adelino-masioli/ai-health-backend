@@ -15,7 +15,7 @@ FastAPI backend for patient registration, vitals ingestion and anomaly analysis 
 ## Setup
 
 ```bash
-python -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env
@@ -54,12 +54,21 @@ Configure key(s) via `.env` (`API_KEYS=dev-api-key,another-key`).
 - `POST /patients`
   - body: `{ "name": "...", "email": "..." }`
   - returns `201` with patient object
+- `GET /patients`
+  - returns `200` with patient list ordered by most recent record first
+- `GET /patients/{id}`
+  - returns `200` with patient object
+  - returns `404` when patient does not exist
 - `POST /heart-rate`
   - body: `{ "patient_id": "uuid", "value": 72, "timestamp": "2026-01-30T10:15:00Z" }`
   - returns `201`
+- `GET /heart-rate/{patient_id}`
+  - returns `200` with heart rate records for the patient
 - `POST /steps`
   - body: `{ "patient_id": "uuid", "total": 8450, "date": "2026-01-30T00:00:00Z" }`
   - returns `201`
+- `GET /steps/{patient_id}`
+  - returns `200` with steps records for the patient
 - `GET /analysis/{patient_id}?window_hours=24`
   - returns `200` with alerts
 
@@ -100,9 +109,15 @@ Includes unit, integration and e2e test flow:
 ## Frontend integration flow
 
 1. Create patient once in `POST /api/v1/patients`
-2. Sync each pending local record to:
+2. Read registered patients in:
+   - `GET /api/v1/patients`
+   - `GET /api/v1/patients/{id}`
+3. Sync each pending local record to:
    - `POST /api/v1/heart-rate`
    - `POST /api/v1/steps`
-3. Read alerts in `GET /api/v1/analysis/{patient_id}`
+4. Read alerts in `GET /api/v1/analysis/{patient_id}`
+5. Read patient telemetry history in:
+   - `GET /api/v1/heart-rate/{patient_id}`
+   - `GET /api/v1/steps/{patient_id}`
 
 Swagger is the source-of-truth contract used by frontend integration.
